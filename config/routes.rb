@@ -5,7 +5,11 @@ Rails.application.routes.draw do
 
   resources :boards do
     resources :swimlanes, only: [:create, :edit, :update, :destroy] do
-      resources :cards, only: [:create, :edit, :update, :destroy]
+      resources :cards, only: [:create, :edit, :update, :destroy] do
+          collection do
+            patch :reorder
+          end
+        end
     end
   end
   root "boards#index"

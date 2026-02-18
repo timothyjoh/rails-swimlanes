@@ -57,6 +57,27 @@ class CardsController < ApplicationController
     end
   end
 
+  def reorder
+    card = Card.find(params[:card_id])
+    # Verify card belongs to current user's board chain
+    unless Current.user.boards.joins(swimlanes: :cards).where(cards: { id: card.id }).exists?
+      raise ActiveRecord::RecordNotFound
+    end
+
+    target_position = params[:position].to_i
+
+    # Move card to destination swimlane
+    card.update!(swimlane_id: @swimlane.id)
+
+    # Rebuild positions in destination swimlane
+    cards = @swimlane.cards.order(:position).to_a
+    cards.delete(card)
+    cards.insert(target_position, card)
+    cards.each_with_index { |c, i| c.update_columns(position: i) }
+
+    head :ok
+  end
+
   private
 
   def set_board
