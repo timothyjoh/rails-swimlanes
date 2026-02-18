@@ -1,0 +1,44 @@
+<%# Description form %>
+<div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+  <%= form_with model: [board, swimlane, card] do |f| %>
+    <%= f.text_area :description, rows: 4,
+        class: "w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+        placeholder: "Add a description..." %>
+    <button type="submit" class="mt-2 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 cursor-pointer">Save</button>
+  <% end %>
+</div>
+
+<%# Due date form %>
+<div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+  <%= form_with model: [board, swimlane, card] do |f| %>
+    <%= f.date_field :due_date,
+        class: "border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    <button type="submit" class="ml-2 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 cursor-pointer">Save</button>
+  <% end %>
+</div>
+
+<%# Labels form %>
+<div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Labels</label>
+  <% color_classes = {
+    "red" => "bg-red-400", "yellow" => "bg-yellow-400",
+    "green" => "bg-green-400", "blue" => "bg-blue-400", "purple" => "bg-purple-400"
+  } %>
+  <%= form_with model: [board, swimlane, card], data: { turbo_frame: "_top" } do |f| %>
+    <%= hidden_field_tag "card[label_ids][]", "" %>
+    <div class="flex gap-3 flex-wrap mb-3">
+      <% labels.each do |label| %>
+        <label class="flex items-center gap-1.5 cursor-pointer" data-label-toggle="">
+          <%= check_box_tag "card[label_ids][]", label.id,
+              card.labels.include?(label),
+              id: "label_#{label.id}" %>
+          <span class="w-4 h-4 rounded <%= color_classes[label.color] %>"></span>
+          <span class="text-sm text-gray-700"><%= label.color.capitalize %></span>
+        </label>
+      <% end %>
+    </div>
+    <button type="submit" class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 cursor-pointer">Save Labels</button>
+  <% end %>
+</div>

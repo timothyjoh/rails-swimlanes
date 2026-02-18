@@ -2,5 +2,6 @@
      class="bg-white rounded shadow-sm p-2 text-sm cursor-grab group"
      data-card-id="<%= card.id %>"
      data-swimlane-id="<%= card.swimlane_id %>">
-  <%= render "cards/card_name", card: card, board: board, swimlane: swimlane %>
+  <%= render "cards/face", card: card, board: board, swimlane: swimlane %>
+  <%= turbo_frame_tag dom_id(card, :detail) %>
 </div>

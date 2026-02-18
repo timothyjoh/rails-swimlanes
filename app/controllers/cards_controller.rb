@@ -2,7 +2,11 @@ class CardsController < ApplicationController
   include ActionView::RecordIdentifier
   before_action :set_board
   before_action :set_swimlane
-  before_action :set_card, only: [:edit, :update, :destroy]
+  before_action :set_card, only: [:show, :edit, :update, :destroy]
+
+  def show
+    @labels = Label.all.order(:color)
+  end
 
   def create
     @card = @swimlane.cards.build(card_params)
@@ -93,6 +97,6 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.require(:card).permit(:name)
+    params.require(:card).permit(:name, :description, :due_date, label_ids: [])
   end
 end

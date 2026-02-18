@@ -17,6 +17,12 @@ A Trello-like board management application built with Rails 8, Hotwire (Turbo + 
 - Positions persist across page reloads
 - All interactions use Turbo Streams (no full-page reloads) and inline Turbo Frames for editing
 
+**Phase 3 — Card Details**
+- Card descriptions: plain text descriptions shown as an indicator on the card face
+- Due dates with overdue indicator: red badge for past-due cards
+- Color-coded labels (red, yellow, green, blue, purple) toggled from the card detail view
+- Card detail modal: click a card title to open an expanded view with description, due date, and labels
+
 ## Getting Started
 
 ### Prerequisites

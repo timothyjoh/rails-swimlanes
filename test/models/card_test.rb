@@ -47,4 +47,43 @@ class CardTest < ActiveSupport::TestCase
     card = @swimlane.cards.create!(name: "Task")
     assert_equal @swimlane, card.swimlane
   end
+
+  # --- Phase 3: due_date behavior ---
+
+  test "overdue? returns true when due_date is in the past" do
+    card = @swimlane.cards.create!(name: "Late", due_date: 1.day.ago.to_date)
+    assert card.overdue?
+  end
+
+  test "overdue? returns false when due_date is today" do
+    card = @swimlane.cards.create!(name: "Today", due_date: Date.current)
+    assert_not card.overdue?
+  end
+
+  test "overdue? returns false when due_date is nil" do
+    card = @swimlane.cards.create!(name: "No date")
+    assert_not card.overdue?
+  end
+
+  test "overdue scope returns only past-due cards" do
+    @swimlane.cards.create!(name: "Past", due_date: 2.days.ago.to_date)
+    @swimlane.cards.create!(name: "Future", due_date: 2.days.from_now.to_date)
+    @swimlane.cards.create!(name: "None")
+
+    overdue = Card.overdue
+    assert_includes overdue.map(&:name), "Past"
+    assert_not_includes overdue.map(&:name), "Future"
+    assert_not_includes overdue.map(&:name), "None"
+  end
+
+  test "upcoming scope returns future-due cards" do
+    @swimlane.cards.create!(name: "Past", due_date: 2.days.ago.to_date)
+    @swimlane.cards.create!(name: "Future", due_date: 2.days.from_now.to_date)
+    @swimlane.cards.create!(name: "None")
+
+    upcoming = Card.upcoming
+    assert_includes upcoming.map(&:name), "Future"
+    assert_not_includes upcoming.map(&:name), "Past"
+    assert_not_includes upcoming.map(&:name), "None"
+  end
 end

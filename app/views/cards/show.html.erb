@@ -1,0 +1,12 @@
+<%= turbo_frame_tag dom_id(@card, :detail) do %>
+  <dialog open role="dialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 w-full h-full border-0 max-w-none p-0">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 p-6 relative">
+      <div class="flex justify-between items-start mb-4">
+        <h2 class="text-lg font-semibold text-gray-800"><%= @card.name %></h2>
+        <button aria-label="Close" onclick="const frame = this.closest('turbo-frame'); this.closest('dialog').removeAttribute('open'); while (frame.firstChild) frame.removeChild(frame.firstChild);"
+                class="text-gray-400 hover:text-gray-600 text-xl leading-none">&#10005;</button>
+      </div>
+      <%= render "cards/detail", card: @card, board: @board, swimlane: @swimlane, labels: @labels %>
+    </div>
+  </dialog>
+<% end %>

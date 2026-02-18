@@ -51,7 +51,7 @@ npx playwright test
 app/
   controllers/     # ApplicationController, BoardsController, SwimlanesController,
                    # CardsController, RegistrationsController, SessionsController, PasswordsController
-  models/          # User, Board, Swimlane, Card, Session, Current
+  models/          # User, Board, Swimlane, Card, Label, CardLabel, Session, Current
   views/           # boards/, swimlanes/, cards/, sessions/, registrations/, passwords/, layouts/
   javascript/
     controllers/   # sortable_controller.js (SortableJS drag-and-drop)
@@ -59,7 +59,8 @@ config/
   routes.rb        # Nested routes: boards → swimlanes → cards
   importmap.rb     # SortableJS pinned via CDN
 db/
-  schema.rb        # Current DB schema (users, sessions, boards, swimlanes, cards)
+  schema.rb        # Current DB schema (users, sessions, boards, swimlanes, cards, labels, card_labels)
+  seeds.rb         # Creates 5 predefined labels (run: bin/rails db:seed)
 test/
   models/          # User, Board, Swimlane, Card unit tests
   controllers/     # Sessions, Passwords controller tests
@@ -83,7 +84,7 @@ Swimlane and card routes are nested under boards:
 /boards/:board_id/swimlanes/:id/edit              → swimlanes#edit
 /boards/:board_id/swimlanes/:swimlane_id/cards    → cards#create
 /boards/:board_id/swimlanes/:swimlane_id/cards/reorder  → cards#reorder (PATCH)
-/boards/:board_id/swimlanes/:swimlane_id/cards/:id      → cards#update, #destroy
+/boards/:board_id/swimlanes/:swimlane_id/cards/:id      → cards#show, #update, #destroy
 /boards/:board_id/swimlanes/:swimlane_id/cards/:id/edit → cards#edit
 ```
 
@@ -96,6 +97,20 @@ All swimlane/card actions scope through the current user's boards:
 @swimlane = @board.swimlanes.find(params[:swimlane_id])   # raises 404 if not under board
 @card = @swimlane.cards.find(params[:id])                 # raises 404 if not under swimlane
 ```
+
+## Data Models (Phase 3 additions)
+
+- **Card** (updated): added `description` (text, nullable), `due_date` (date, nullable), `overdue?` method, `overdue` and `upcoming` scopes
+- **Label**: `color` (string, one of: red/yellow/green/blue/purple), unique index on color. Seeded via `db/seeds.rb` — run `bin/rails db:seed` to create the 5 predefined labels
+- **CardLabel**: join model between Card and Label (`card_id` FK, `label_id` FK, unique composite index)
+
+### Card Detail Route
+
+```
+GET /boards/:board_id/swimlanes/:swimlane_id/cards/:id  → cards#show
+```
+
+Displays the card detail view with description, due date, and label management.
 
 ## SortableJS Drag-and-Drop (Phase 2)
 

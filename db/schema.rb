@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_173929) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_200003) do
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -19,13 +19,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_173929) do
     t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
+  create_table "card_labels", force: :cascade do |t|
+    t.integer "card_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "label_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id", "label_id"], name: "index_card_labels_on_card_id_and_label_id", unique: true
+    t.index ["card_id"], name: "index_card_labels_on_card_id"
+    t.index ["label_id"], name: "index_card_labels_on_label_id"
+  end
+
   create_table "cards", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "description"
+    t.date "due_date"
     t.string "name", null: false
     t.integer "position", default: 0, null: false
     t.integer "swimlane_id", null: false
     t.datetime "updated_at", null: false
     t.index ["swimlane_id"], name: "index_cards_on_swimlane_id"
+  end
+
+  create_table "labels", force: :cascade do |t|
+    t.string "color", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["color"], name: "index_labels_on_color", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -55,6 +74,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_173929) do
   end
 
   add_foreign_key "boards", "users"
+  add_foreign_key "card_labels", "cards"
+  add_foreign_key "card_labels", "labels"
   add_foreign_key "cards", "swimlanes"
   add_foreign_key "sessions", "users"
   add_foreign_key "swimlanes", "boards"

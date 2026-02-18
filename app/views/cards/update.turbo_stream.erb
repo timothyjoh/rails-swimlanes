@@ -1,1 +1,3 @@
-<%= turbo_stream.replace dom_id(@card, :name), partial: "cards/card_name", locals: { card: @card, board: @board, swimlane: @swimlane } %>
+<%= turbo_stream.replace dom_id(@card, :face) do %>
+  <%= render "cards/face", card: @card, board: @board, swimlane: @swimlane %>
+<% end %>

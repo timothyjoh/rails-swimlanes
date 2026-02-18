@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       member do
         get :header
       end
-      resources :cards, only: [:create, :edit, :update, :destroy] do
+      resources :cards, only: [:show, :create, :edit, :update, :destroy] do
           collection do
             patch :reorder
           end

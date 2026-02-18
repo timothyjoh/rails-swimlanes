@@ -1,0 +1,19 @@
+<div id="<%= dom_id(card, :face) %>">
+  <%= render "cards/card_name", card: card, board: board, swimlane: swimlane %>
+
+  <div class="flex items-center gap-2 mt-1 flex-wrap">
+    <% if card.description.present? %>
+      <span class="text-xs text-gray-400" title="Has description" data-description-indicator="">&#8801;</span>
+    <% end %>
+    <% if card.due_date.present? %>
+      <span class="text-xs px-1.5 py-0.5 rounded <%= card.overdue? ? 'bg-red-100 text-red-700 overdue' : 'bg-gray-100 text-gray-600' %>"
+            data-due-date-badge="">
+        <%= card.due_date.strftime("%b %-d") %>
+      </span>
+    <% end %>
+    <% chip_colors = { "red" => "bg-red-400", "yellow" => "bg-yellow-400", "green" => "bg-green-400", "blue" => "bg-blue-400", "purple" => "bg-purple-400" } %>
+    <% card.labels.each do |label| %>
+      <span class="w-3 h-3 rounded-full <%= chip_colors[label.color] %>" title="<%= label.color %>" data-label-chip=""></span>
+    <% end %>
+  </div>
+</div>

@@ -1,10 +1,13 @@
-STATUS.md is updated. Here's what was done:
+STATUS.md is updated. Here's a summary of what was written:
 
-- **Header**: bumped to "Last updated after Phase 2"
-- **Current state**: updated to describe the working board canvas with lanes and drag-and-drop cards
-- **Phase 2 section added** with:
-  - What was built: Swimlane + Card models, full board canvas, CRUD via Turbo Streams, SortableJS drag-and-drop, authorization chain, tech debt paid from Phase 1
-  - How to run it: same install steps, updated narrative for the new board canvas UX
-  - Review findings: 1 fixed (boards#show auth test in `b3f839a`), 5 open items deferred to Phase 3
-  - What's next: carry-over fixes first, then card details
-  - Test coverage: **73 runs, 171 assertions, 0 failures** — **86.19%** line coverage (verified by actually running `bin/rails test`)
+**Phase 3 section covers:**
+
+- **What was built**: Card detail modal via Turbo Frame, description + due date + label fields, `Label`/`CardLabel` models, DB-level card ordering fix, N+1 eager-loading fix, real Playwright drag test replacing the fetch stub
+
+- **How to run it**: Includes `bin/rails db:seed` as a new step needed for the 5 predefined labels
+
+- **Review findings**: All 3 MUST-FIX items are marked resolved (description/due-date Turbo Stream fix, drag assertion fix, overdue HTML assertion fix); 4 open deferred items noted honestly
+
+- **Test results**: 89 runs, 212 assertions, 0 failures, 0 errors — **87.06%** line coverage (actual numbers from running the suite)
+
+- **Known gaps**: Upcoming scope boundary, N+1 regression guard, invalid label IDs, Turbo Stream label chip HTML assertion

@@ -5,14 +5,14 @@ You are the Status Reporter. Your job is to update the project's STATUS.md at th
 ## Context — Read These First
 
 1. **Existing STATUS.md** (if it exists) — preserve all previous phase sections
-2. **Phase Spec**: `docs/phases/phase-2/SPEC.md` — what this phase set out to do
-3. **Phase Plan**: `docs/phases/phase-2/PLAN.md` — how it was implemented
-4. **Phase Review**: `docs/phases/phase-2/REVIEW.md` — code review findings
-5. **Phase Reflections**: `docs/phases/phase-2/REFLECTIONS.md` — lessons and forward look
+2. **Phase Spec**: `docs/phases/phase-3/SPEC.md` — what this phase set out to do
+3. **Phase Plan**: `docs/phases/phase-3/PLAN.md` — how it was implemented
+4. **Phase Review**: `docs/phases/phase-3/REVIEW.md` — code review findings
+5. **Phase Reflections**: `docs/phases/phase-3/REFLECTIONS.md` — lessons and forward look
 6. **Test output**: Run the project's test suite (check AGENTS.md for the test command) and capture results
 7. **Project Brief**: `BRIEF.md` — for overall progress context
 
-Current phase: 2
+Current phase: 3
 
 ## Output
 

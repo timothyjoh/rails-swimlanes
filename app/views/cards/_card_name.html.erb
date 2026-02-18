@@ -1,11 +1,13 @@
 <%= turbo_frame_tag dom_id(card, :name) do %>
   <div class="flex justify-between items-center">
-    <span><%= card.name %></span>
+    <%= link_to card.name, board_swimlane_card_path(board, swimlane, card),
+        data: { turbo_frame: dom_id(card, :detail) },
+        class: "font-medium text-gray-800 hover:text-blue-600 cursor-pointer" %>
     <div class="flex gap-1 opacity-0 group-hover:opacity-100">
-      <%= link_to "✎", edit_board_swimlane_card_path(board, swimlane, card),
+      <%= link_to "&#9998;".html_safe, edit_board_swimlane_card_path(board, swimlane, card),
           class: "text-xs text-blue-400 hover:text-blue-600",
           data: { turbo_frame: dom_id(card, :name) } %>
-      <%= button_to "✕", board_swimlane_card_path(board, swimlane, card),
+      <%= button_to "&#10005;".html_safe, board_swimlane_card_path(board, swimlane, card),
           method: :delete,
           class: "text-xs text-red-400 hover:text-red-600 bg-transparent border-0 cursor-pointer p-0",
           data: { turbo_confirm: "Delete this card?" } %>

@@ -6,7 +6,7 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @swimlanes = @board.swimlanes.order(:position).includes(:cards)
+    @swimlanes = @board.swimlanes.order(:position).includes(cards: :labels)
   end
 
   def new
