@@ -36,5 +36,13 @@ export default class extends Controller {
       },
       body: JSON.stringify({ card_id: cardId, position: position })
     })
+      .then(response => {
+        if (!response.ok) {
+          event.from.insertBefore(event.item, event.from.children[event.oldIndex] || null)
+        }
+      })
+      .catch(() => {
+        event.from.insertBefore(event.item, event.from.children[event.oldIndex] || null)
+      })
   }
 }

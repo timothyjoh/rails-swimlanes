@@ -66,12 +66,11 @@ class CardsController < ApplicationController
 
     target_position = params[:position].to_i
 
-    # Move card to destination swimlane
+    # Query destination cards before moving (avoids identity-map ambiguity)
+    cards = @swimlane.cards.where.not(id: card.id).order(:position).to_a
     card.update!(swimlane_id: @swimlane.id)
 
     # Rebuild positions in destination swimlane
-    cards = @swimlane.cards.order(:position).to_a
-    cards.delete(card)
     cards.insert(target_position, card)
     cards.each_with_index { |c, i| c.update_columns(position: i) }
 
