@@ -1,0 +1,12 @@
+<%= form_with model: board do |f| %>
+  <% if board.errors.any? %>
+    <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg">
+      <%= board.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+  <div class="mb-4">
+    <%= f.label :name, class: "block text-sm font-medium mb-1" %>
+    <%= f.text_field :name, class: "w-full border rounded px-3 py-2", autofocus: true %>
+  </div>
+  <%= f.submit class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+<% end %>

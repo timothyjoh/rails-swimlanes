@@ -1,0 +1,29 @@
+Both review documents are written. Here's a summary of what the review found:
+
+---
+
+## Review Complete
+
+**Verdict: NEEDS-FIX**
+
+### Code Quality — Key Findings
+
+| Severity | Issue |
+|----------|-------|
+| Critical | `boards.name` column has no `null: false` DB constraint — model validation can be bypassed |
+| Critical | `parallelize(workers: :number_of_processors)` + SimpleCov are incompatible — coverage reporting is unreliable |
+| Minor | `ApplicationController` missing explicit `before_action :require_authentication` (works implicitly via concern, but fragile) |
+| Minor | `SessionsController` test uses `User.take` — non-deterministic fixture selection |
+| Minor | `show` action/view added outside plan scope and untested |
+
+### Test Quality — Key Findings
+
+| Severity | Issue |
+|----------|-------|
+| Critical | SimpleCov parallelization issue means `minimum_coverage 80` is not reliably enforced |
+| Minor | Sign-up failure test missing `assert_not User.exists?` negative assertion |
+| Minor | Boards index test doesn't assert other users' boards are absent |
+| Minor | E2E login test asserts heading text only, not URL |
+| Minor | E2E delete dialog handler registered after visibility check (ordering risk in slow CI) |
+
+**What's genuinely good:** No mock abuse anywhere, real ActiveRecord objects throughout, cross-user authorization tested for edit/update/delete (went beyond the plan), `uniqueEmail` helper in E2E avoids collision races, and the `SessionTestHelper` is a clean abstraction for test sign-in.

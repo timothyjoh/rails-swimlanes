@@ -1,0 +1,3 @@
+# Sessions are created programmatically in tests via SessionTestHelper#sign_in_as.
+# This file exists to ensure Rails fixture loading truncates the sessions table
+# in the correct order (before users) to avoid FK violations.
