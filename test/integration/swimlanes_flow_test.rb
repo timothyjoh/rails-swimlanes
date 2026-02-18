@@ -1,0 +1,58 @@
+require "test_helper"
+
+class SwimlanesFlowTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email_address: "swim@test.com", password: "password123", password_confirmation: "password123")
+    @board = @user.boards.create!(name: "My Board")
+    sign_in_as @user
+  end
+
+  test "creates a swimlane" do
+    assert_difference "Swimlane.count" do
+      post board_swimlanes_path(@board), params: { swimlane: { name: "To Do" } }
+    end
+    assert_redirected_to board_path(@board)
+  end
+
+  test "rejects blank swimlane name" do
+    assert_no_difference "Swimlane.count" do
+      post board_swimlanes_path(@board), params: { swimlane: { name: "" } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "rejects whitespace-only swimlane name" do
+    assert_no_difference "Swimlane.count" do
+      post board_swimlanes_path(@board), params: { swimlane: { name: "   " } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "updates a swimlane name" do
+    swimlane = @board.swimlanes.create!(name: "Old Name")
+    patch board_swimlane_path(@board, swimlane), params: { swimlane: { name: "New Name" } }
+    assert_redirected_to board_path(@board)
+    assert_equal "New Name", swimlane.reload.name
+  end
+
+  test "destroys a swimlane and its cards" do
+    swimlane = @board.swimlanes.create!(name: "Lane")
+    swimlane.cards.create!(name: "Card A")
+    assert_difference ["Swimlane.count", "Card.count"], -1 do
+      delete board_swimlane_path(@board, swimlane)
+    end
+    assert_redirected_to board_path(@board)
+  end
+
+  test "cannot create swimlane on another user's board" do
+    other_board = User.create!(email_address: "other@test.com", password: "pass1234", password_confirmation: "pass1234").boards.create!(name: "Other")
+    post board_swimlanes_path(other_board), params: { swimlane: { name: "Lane" } }
+    assert_response :not_found
+  end
+
+  test "unauthenticated request redirects to login" do
+    sign_out
+    post board_swimlanes_path(@board), params: { swimlane: { name: "Lane" } }
+    assert_redirected_to new_session_path
+  end
+end

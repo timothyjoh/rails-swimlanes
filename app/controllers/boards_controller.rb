@@ -5,7 +5,9 @@ class BoardsController < ApplicationController
     @boards = Current.user.boards.order(created_at: :desc)
   end
 
-  def show; end
+  def show
+    @swimlanes = @board.swimlanes.order(:position).includes(:cards)
+  end
 
   def new
     @board = Current.user.boards.new

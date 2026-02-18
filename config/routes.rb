@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :registration, only: [:new, :create]
 
-  resources :boards
+  resources :boards do
+    resources :swimlanes, only: [:create, :edit, :update, :destroy] do
+      resources :cards, only: [:create, :edit, :update, :destroy]
+    end
+  end
   root "boards#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
