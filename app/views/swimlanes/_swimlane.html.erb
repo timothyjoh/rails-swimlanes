@@ -18,7 +18,7 @@
        data-controller="sortable"
        data-sortable-url-value="<%= board_swimlane_cards_path(board, swimlane) %>"
        data-sortable-swimlane-id-value="<%= swimlane.id %>">
-    <%= render partial: "cards/card", collection: swimlane.cards.order(:position), locals: { board: board, swimlane: swimlane } %>
+    <%= render partial: "cards/card", collection: swimlane.cards.sort_by(&:position), locals: { board: board, swimlane: swimlane } %>
   </div>
 
   <%= turbo_frame_tag dom_id(swimlane, :new_card_form) do %>

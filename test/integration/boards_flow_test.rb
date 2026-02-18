@@ -47,6 +47,13 @@ class BoardsFlowTest < ActionDispatch::IntegrationTest
     assert_not Board.exists?(board.id)
   end
 
+  test "cannot view another user's board" do
+    other_user = User.create!(email_address: "other2@example.com", password: "password123")
+    other_board = Board.create!(name: "Private Show", user: other_user)
+    get board_path(other_board)
+    assert_response :not_found
+  end
+
   test "cannot access another user's board" do
     other_user = User.create!(email_address: "other@example.com", password: "password123")
     other_board = Board.create!(name: "Private", user: other_user)

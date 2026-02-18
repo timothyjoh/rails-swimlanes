@@ -7,7 +7,7 @@
           1,
           1,
           1,
-          65,
+          66,
           null
         ]
       },
@@ -69,69 +69,38 @@
           1,
           1,
           null,
-          150,
+          154,
           null,
           1,
           null
         ]
       },
-      "/Users/timothyjohnson/wrk/rails-swimlanes/app/models/current.rb": {
+      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/passwords_controller.rb": {
         "lines": [
           1,
-          1,
-          1,
-          null
-        ]
-      },
-      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/boards_controller.rb": {
-        "lines": [
           1,
           1,
           null,
           1,
+          null,
+          null,
           1,
           null,
           null,
           1,
           0,
+          0,
+          0,
           null,
-          null,
-          1,
           0,
           null,
           null,
-          1,
-          2,
-          2,
-          1,
-          null,
-          1,
-          null,
-          null,
-          null,
-          1,
-          null,
-          1,
-          2,
-          1,
-          null,
-          1,
-          null,
-          null,
           null,
           1,
           1,
           1,
           null,
-          null,
           1,
-          null,
-          1,
-          6,
-          null,
-          null,
-          1,
-          4,
           null,
           null
         ]
@@ -177,15 +146,15 @@
           null,
           null,
           1,
-          35,
+          36,
           null,
           null,
           1,
-          35,
+          36,
           null,
           null,
           1,
-          35,
+          36,
           null,
           null,
           1,
@@ -208,6 +177,14 @@
           2,
           2,
           null,
+          null
+        ]
+      },
+      "/Users/timothyjohnson/wrk/rails-swimlanes/app/models/current.rb": {
+        "lines": [
+          1,
+          1,
+          1,
           null
         ]
       },
@@ -312,6 +289,31 @@
           null
         ]
       },
+      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/sessions_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          4,
+          2,
+          2,
+          null,
+          2,
+          null,
+          null,
+          null,
+          1,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
       "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/swimlanes_controller.rb": {
         "lines": [
           1,
@@ -376,31 +378,6 @@
           null
         ]
       },
-      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/sessions_controller.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          null,
-          1,
-          4,
-          2,
-          2,
-          null,
-          2,
-          null,
-          null,
-          null,
-          1,
-          2,
-          2,
-          null,
-          null
-        ]
-      },
       "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/registrations_controller.rb": {
         "lines": [
           1,
@@ -428,24 +405,39 @@
           null
         ]
       },
-      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/passwords_controller.rb": {
+      "/Users/timothyjohnson/wrk/rails-swimlanes/app/controllers/boards_controller.rb": {
         "lines": [
           1,
           1,
-          1,
           null,
           1,
-          null,
-          null,
           1,
           null,
           null,
           1,
           0,
+          null,
+          null,
+          1,
           0,
-          0,
           null,
-          0,
+          null,
+          1,
+          2,
+          2,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          1,
+          null,
+          1,
           null,
           null,
           null,
@@ -453,7 +445,15 @@
           1,
           1,
           null,
+          null,
           1,
+          null,
+          1,
+          7,
+          null,
+          null,
+          1,
+          4,
           null,
           null
         ]
@@ -492,6 +492,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1771438951
+    "timestamp": 1771439182
   }
 }

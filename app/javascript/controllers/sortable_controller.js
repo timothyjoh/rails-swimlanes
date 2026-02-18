@@ -26,7 +26,7 @@ export default class extends Controller {
 
     // Use the destination container's reorder URL
     const baseUrl = event.to.dataset.sortableUrlValue
-    const reorderUrl = baseUrl.replace('/cards', '/cards/reorder')
+    const reorderUrl = baseUrl + '/reorder'
 
     fetch(reorderUrl, {
       method: "PATCH",
