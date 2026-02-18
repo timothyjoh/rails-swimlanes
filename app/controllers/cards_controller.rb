@@ -44,7 +44,7 @@ class CardsController < ApplicationController
             locals: { board: @board, swimlane: @swimlane, card: @card }
           ), status: :unprocessable_entity
         end
-        format.html { redirect_to @board }
+        format.html { redirect_to @board, status: :unprocessable_entity }
       end
     end
   end
