@@ -27,7 +27,7 @@ class BoardTest < ActiveSupport::TestCase
   end
 
   test "is invalid with whitespace-only name" do
-    board = Board.new(name: "   ", user: users(:one))
+    board = Board.new(name: "   ", user: @user)
     assert_not board.valid?
     assert_includes board.errors[:name], "can't be blank"
   end
