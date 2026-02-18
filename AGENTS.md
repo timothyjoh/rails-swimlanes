@@ -49,6 +49,7 @@ npx playwright test
 
 ```
 app/
+  channels/        # ApplicationCable::Connection, BoardChannel
   controllers/     # ApplicationController, BoardsController, SwimlanesController,
                    # CardsController, MembershipsController, RegistrationsController,
                    # SessionsController, PasswordsController
@@ -72,6 +73,7 @@ e2e/               # Playwright end-to-end tests
   auth.spec.js
   boards.spec.js
   board_canvas.spec.js
+  realtime.spec.js
 docs/phases/       # Phase specs, research, plans, reflections
 ```
 
@@ -144,12 +146,19 @@ Content-Type: application/json
 
 The `reorder` action moves the card to the destination swimlane and rebuilds all positions in that lane.
 
+## ActionCable Real-time Updates (Phase 5)
+
+- **Connection-level auth**: `ApplicationCable::Connection` reads the session cookie, looks up the authenticated user, and rejects unauthenticated connections
+- **Channel-level auth**: `BoardChannel#subscribed` verifies the signed stream name (HMAC-based Global ID), checks `BoardMembership.exists?` for the current user, and rejects non-members
+- **Broadcasts**: Live updates are triggered in controllers (`CardsController`, `SwimlanesController`) after each write operation using `Turbo::StreamsChannel.broadcast_*_to`
+- **View integration**: `boards/show.html.erb` includes `turbo_stream_from @board, channel: BoardChannel` to subscribe the browser to real-time updates
+
 ## Phase Roadmap
 - Phase 1 ✓ — Setup, auth, board CRUD
 - Phase 2 ✓ — Swimlanes (columns) and cards
 - Phase 3 ✓ — Card details (descriptions, due dates, labels, checklists)
 - Phase 4 ✓ — Board sharing between users (BoardMembership, membership-scoped auth, sharing UI)
-- Phase 5: Real-time updates (ActionCable)
+- Phase 5 ✓ — Real-time updates (ActionCable)
 - Phase 6: Board background customization
 
 ## Key Decisions

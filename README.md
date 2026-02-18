@@ -31,6 +31,12 @@ A Trello-like board management application built with Rails 8, Hotwire (Turbo + 
 - Shared boards appear on the collaborator's boards index page
 - Non-members receive 404 when accessing a board URL directly
 
+**Phase 5 — Real-time Collaboration**
+- Live updates via ActionCable: cards and swimlanes created, updated, or deleted by one user appear instantly for all board members
+- Connection-level authentication ensures only signed-in users can open WebSocket connections
+- Channel-level authorization verifies board membership before subscribing to updates
+- No page reload required — Turbo Streams are broadcast over WebSocket to all connected members
+
 ## Getting Started
 
 ### Prerequisites
@@ -83,5 +89,5 @@ Coverage report generated to `coverage/index.html` after running `bin/rails test
 - Phase 2 ✓ — Swimlanes (columns) and cards
 - Phase 3 ✓ — Card details (descriptions, due dates, labels, checklists)
 - Phase 4 ✓ — Board sharing between users
-- Phase 5 — Real-time updates (ActionCable)
+- Phase 5 ✓ — Real-time collaboration (ActionCable)
 - Phase 6 — Board background customization

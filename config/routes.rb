@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       member do
         get :header
       end
+      collection do
+        patch :reorder
+      end
       resources :cards, only: [:show, :create, :edit, :update, :destroy] do
           collection do
             patch :reorder

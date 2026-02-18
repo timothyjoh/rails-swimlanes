@@ -1,0 +1,11 @@
+STATUS.md updated. Here's what was added for Phase 5:
+
+**What changed:**
+- Header updated: "Last updated after Phase 5"
+- **Current state** blurb extended to mention live ActionCable broadcasts
+- **Phase 5 section** appended with:
+  - What was built: `BoardChannel` with two-layer auth, 7 broadcast call sites (4 card + 3 swimlane), `turbo_stream_from` subscription tag, `signInAs` alias, E2E realtime spec
+  - How to run it: same commands + instructions to open two windows to see live updates
+  - Review findings: 2 MUST-FIX items resolved (missing E2E card move test, unguarded destroy broadcasts), 3 open items carried forward
+  - What's next: Phase 6 board backgrounds (final phase)
+  - Test coverage: **129 runs, 300 assertions, 0 failures, 86.23%** (actual numbers from running the suite)

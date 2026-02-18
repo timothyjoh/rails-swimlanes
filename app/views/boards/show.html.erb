@@ -1,5 +1,7 @@
 <% is_owner = @board.board_memberships.exists?(user: Current.user, role: :owner) %>
 
+<%= turbo_stream_from @board, channel: BoardChannel %>
+
 <div class="flex flex-col h-full">
   <div class="flex justify-between items-center mb-4 px-4 pt-4">
     <h1 class="text-2xl font-bold"><%= @board.name %></h1>
@@ -12,7 +14,12 @@
   </div>
 
   <div class="flex gap-4 overflow-x-auto px-4 pb-4 items-start">
-    <div id="swimlanes" class="flex gap-4 items-start">
+    <div id="swimlanes"
+         class="flex gap-4 items-start"
+         data-controller="sortable"
+         data-sortable-url-value="<%= reorder_board_swimlanes_path(@board) %>"
+         data-sortable-axis-value="x"
+         data-sortable-group-value="swimlanes">
       <%= render partial: "swimlanes/swimlane", collection: @swimlanes, locals: { board: @board } %>
     </div>
 

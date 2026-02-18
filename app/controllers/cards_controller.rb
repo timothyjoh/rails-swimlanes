@@ -11,6 +11,12 @@ class CardsController < ApplicationController
   def create
     @card = @swimlane.cards.build(card_params)
     if @card.save
+      Turbo::StreamsChannel.broadcast_append_to(
+        @board,
+        target: dom_id(@swimlane, :cards),
+        partial: "cards/card",
+        locals: { card: @card, board: @board, swimlane: @swimlane }
+      )
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @board }
@@ -35,6 +41,12 @@ class CardsController < ApplicationController
 
   def update
     if @card.update(card_params)
+      Turbo::StreamsChannel.broadcast_replace_to(
+        @board,
+        target: dom_id(@card, :face),
+        partial: "cards/face",
+        locals: { card: @card, board: @board, swimlane: @swimlane }
+      )
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @board }
@@ -54,10 +66,17 @@ class CardsController < ApplicationController
   end
 
   def destroy
-    @card.destroy
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@card)) }
-      format.html { redirect_to @board }
+    if @card.destroy
+      Turbo::StreamsChannel.broadcast_remove_to(@board, target: dom_id(@card))
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@card)) }
+        format.html { redirect_to @board }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(dom_id(@card), partial: "cards/card", locals: { card: @card, board: @board, swimlane: @swimlane }), status: :unprocessable_entity }
+        format.html { redirect_to @board, alert: @card.errors.full_messages.to_sentence }
+      end
     end
   end
 
@@ -78,6 +97,14 @@ class CardsController < ApplicationController
     # Rebuild positions in destination swimlane
     cards.insert(target_position, card)
     cards.each_with_index { |c, i| c.update_columns(position: i) }
+
+    Turbo::StreamsChannel.broadcast_remove_to(@board, target: dom_id(card))
+    Turbo::StreamsChannel.broadcast_append_to(
+      @board,
+      target: dom_id(@swimlane, :cards),
+      partial: "cards/card",
+      locals: { card: card, board: @board, swimlane: @swimlane }
+    )
 
     head :ok
   end

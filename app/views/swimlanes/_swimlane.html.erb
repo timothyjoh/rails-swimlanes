@@ -1,4 +1,6 @@
-<div id="<%= dom_id(swimlane) %>" class="flex-shrink-0 w-64 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
+<div id="<%= dom_id(swimlane) %>"
+     class="flex-shrink-0 w-64 bg-gray-100 rounded-lg p-3 flex flex-col gap-2"
+     data-swimlane-id="<%= swimlane.id %>">
   <%= turbo_frame_tag dom_id(swimlane, :header) do %>
     <div class="flex justify-between items-center">
       <span class="font-semibold text-sm"><%= swimlane.name %></span>

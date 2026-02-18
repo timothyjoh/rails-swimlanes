@@ -1,6 +1,8 @@
 require "test_helper"
 
 class CardsFlowTest < ActionDispatch::IntegrationTest
+  include ActionCable::TestHelper
+
   setup do
     @user = User.create!(email_address: "cards@test.com", password: "password123", password_confirmation: "password123")
     @board = create_owned_board(@user, name: "Board")
@@ -145,5 +147,46 @@ class CardsFlowTest < ActionDispatch::IntegrationTest
           headers: { "Accept" => "text/vnd.turbo-stream.html" }
     assert_response :success
     assert_empty card.reload.labels
+  end
+
+  # --- Phase 5: broadcasts ---
+
+  test "card create broadcasts to board stream" do
+    assert_broadcasts @board.to_gid_param, 1 do
+      post board_swimlane_cards_path(@board, @swimlane),
+           params: { card: { name: "Broadcast Card" } },
+           headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
+  test "card update broadcasts to board stream" do
+    card = @swimlane.cards.create!(name: "Old Name")
+    assert_broadcasts @board.to_gid_param, 1 do
+      patch board_swimlane_card_path(@board, @swimlane, card),
+            params: { card: { name: "New Name" } },
+            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
+  test "card destroy broadcasts to board stream" do
+    card = @swimlane.cards.create!(name: "Doomed")
+    assert_broadcasts @board.to_gid_param, 1 do
+      delete board_swimlane_card_path(@board, @swimlane, card),
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
+  test "card reorder broadcasts remove and append to board stream" do
+    card = @swimlane.cards.create!(name: "Mover")
+    lane2 = @board.swimlanes.create!(name: "Done")
+    assert_broadcasts @board.to_gid_param, 2 do
+      patch reorder_board_swimlane_cards_path(@board, lane2),
+            params: { card_id: card.id, position: 0 },
+            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
   end
 end

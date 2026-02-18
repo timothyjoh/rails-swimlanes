@@ -1,6 +1,8 @@
 require "test_helper"
 
 class SwimlanesFlowTest < ActionDispatch::IntegrationTest
+  include ActionCable::TestHelper
+
   setup do
     @user = User.create!(email_address: "swim@test.com", password: "password123", password_confirmation: "password123")
     @board = create_owned_board(@user, name: "My Board")
@@ -86,5 +88,35 @@ class SwimlanesFlowTest < ActionDispatch::IntegrationTest
     sign_out
     post board_swimlanes_path(@board), params: { swimlane: { name: "Lane" } }
     assert_redirected_to new_session_path
+  end
+
+  # --- Phase 5: broadcasts ---
+
+  test "swimlane create broadcasts to board stream" do
+    assert_broadcasts @board.to_gid_param, 1 do
+      post board_swimlanes_path(@board),
+           params: { swimlane: { name: "Broadcast Lane" } },
+           headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
+  test "swimlane update broadcasts to board stream" do
+    swimlane = @board.swimlanes.create!(name: "Old Name")
+    assert_broadcasts @board.to_gid_param, 1 do
+      patch board_swimlane_path(@board, swimlane),
+            params: { swimlane: { name: "New Name" } },
+            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
+  test "swimlane destroy broadcasts to board stream" do
+    swimlane = @board.swimlanes.create!(name: "Doomed Lane")
+    assert_broadcasts @board.to_gid_param, 1 do
+      delete board_swimlane_path(@board, swimlane),
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
   end
 end

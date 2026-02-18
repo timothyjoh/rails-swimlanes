@@ -4,14 +4,16 @@ import Sortable from "sortablejs"
 export default class extends Controller {
   static values = {
     url: String,
-    swimlaneId: Number
+    group: { type: String, default: "cards" },
+    axis: { type: String, default: "" }
   }
 
   connect() {
     this.sortable = Sortable.create(this.element, {
-      group: "cards",
+      group: this.groupValue,
       animation: 150,
       ghostClass: "opacity-50",
+      direction: this.axisValue === "x" ? "horizontal" : "vertical",
       onEnd: this.onEnd.bind(this)
     })
   }
@@ -21,28 +23,36 @@ export default class extends Controller {
   }
 
   onEnd(event) {
-    const cardId = event.item.dataset.cardId
+    const item = event.item
     const position = event.newIndex
+    const revertOnFailure = () => {
+      event.from.insertBefore(item, event.from.children[event.oldIndex] || null)
+    }
 
-    // Use the destination container's reorder URL
-    const baseUrl = event.to.dataset.sortableUrlValue
-    const reorderUrl = baseUrl + '/reorder'
+    let url, body
 
-    fetch(reorderUrl, {
+    if (item.dataset.cardId) {
+      // Card reorder — post to destination swimlane's reorder URL
+      const baseUrl = event.to.dataset.sortableUrlValue
+      url = baseUrl + "/reorder"
+      body = { card_id: item.dataset.cardId, position }
+    } else if (item.dataset.swimlaneId) {
+      // Swimlane reorder — post to board's swimlane reorder URL
+      url = this.urlValue
+      body = { swimlane_id: item.dataset.swimlaneId, position }
+    } else {
+      return
+    }
+
+    fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
       },
-      body: JSON.stringify({ card_id: cardId, position: position })
+      body: JSON.stringify(body)
     })
-      .then(response => {
-        if (!response.ok) {
-          event.from.insertBefore(event.item, event.from.children[event.oldIndex] || null)
-        }
-      })
-      .catch(() => {
-        event.from.insertBefore(event.item, event.from.children[event.oldIndex] || null)
-      })
+      .then(response => { if (!response.ok) revertOnFailure() })
+      .catch(revertOnFailure)
   }
 }

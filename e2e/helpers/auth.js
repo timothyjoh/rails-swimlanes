@@ -21,6 +21,8 @@ export async function signIn(page, email, password = PASSWORD) {
   await page.waitForURL(/\/(boards)?$/);
 }
 
+export const signInAs = signIn;
+
 export async function createBoard(page, name) {
   await page.click('text=New Board');
   await page.fill('[name="board[name]"]', name);
