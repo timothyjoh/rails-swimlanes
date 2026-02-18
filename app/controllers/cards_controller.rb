@@ -68,6 +68,7 @@ class CardsController < ApplicationController
 
     # Query destination cards before moving (avoids identity-map ambiguity)
     cards = @swimlane.cards.where.not(id: card.id).order(:position).to_a
+    target_position = [[target_position, 0].max, cards.length].min
     card.update!(swimlane_id: @swimlane.id)
 
     # Rebuild positions in destination swimlane

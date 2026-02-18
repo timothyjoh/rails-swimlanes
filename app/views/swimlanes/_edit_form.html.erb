@@ -6,7 +6,8 @@
   <div class="flex gap-1">
     <%= f.text_field :name, class: "flex-1 text-sm border rounded px-2 py-1" %>
     <%= f.submit "Save", class: "text-sm bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer" %>
-    <%= link_to "Cancel", board_path(board), class: "text-xs text-gray-500 hover:underline",
+    <%= link_to "Cancel", header_board_swimlane_path(board, swimlane),
+        class: "text-xs text-gray-500 hover:underline",
         data: { turbo_frame: dom_id(swimlane, :header) } %>
   </div>
 <% end %>

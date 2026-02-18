@@ -47,6 +47,14 @@ class BoardsFlowTest < ActionDispatch::IntegrationTest
     assert_not Board.exists?(board.id)
   end
 
+  test "shows board with swimlanes" do
+    board = @user.boards.create!(name: "My Board")
+    swimlane = board.swimlanes.create!(name: "To Do")
+    get board_path(board)
+    assert_response :success
+    assert_match swimlane.name, response.body
+  end
+
   test "cannot view another user's board" do
     other_user = User.create!(email_address: "other2@example.com", password: "password123")
     other_board = Board.create!(name: "Private Show", user: other_user)

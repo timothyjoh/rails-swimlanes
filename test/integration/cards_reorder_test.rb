@@ -40,6 +40,15 @@ class CardsReorderTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "clamps out-of-bounds position to last" do
+    patch reorder_board_swimlane_cards_path(@board, @lane1),
+      params: { card_id: @card1.id, position: 999 },
+      as: :json
+    assert_response :ok
+    # card should be at position 1 (last in a 2-card lane)
+    assert_equal 1, @card1.reload.position
+  end
+
   test "unauthenticated reorder redirects to login" do
     sign_out
     patch reorder_board_swimlane_cards_path(@board, @lane1),

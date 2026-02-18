@@ -1,7 +1,7 @@
 class SwimlanesController < ApplicationController
   include ActionView::RecordIdentifier
   before_action :set_board
-  before_action :set_swimlane, only: [:edit, :update, :destroy]
+  before_action :set_swimlane, only: [:edit, :header, :update, :destroy]
 
   def create
     @swimlane = @board.swimlanes.build(swimlane_params)
@@ -16,6 +16,10 @@ class SwimlanesController < ApplicationController
         format.html { redirect_to @board, status: :unprocessable_entity }
       end
     end
+  end
+
+  def header
+    render partial: "swimlanes/header", locals: { swimlane: @swimlane, board: @board }
   end
 
   def edit

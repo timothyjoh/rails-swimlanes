@@ -7,8 +7,10 @@
     </div>
   </div>
 
-  <div class="flex gap-4 overflow-x-auto px-4 pb-4 items-start" id="swimlanes">
-    <%= render partial: "swimlanes/swimlane", collection: @swimlanes, locals: { board: @board } %>
+  <div class="flex gap-4 overflow-x-auto px-4 pb-4 items-start">
+    <div id="swimlanes" class="flex gap-4 items-start">
+      <%= render partial: "swimlanes/swimlane", collection: @swimlanes, locals: { board: @board } %>
+    </div>
 
     <div class="flex-shrink-0 w-64">
       <%= turbo_frame_tag "new_swimlane_form" do %>

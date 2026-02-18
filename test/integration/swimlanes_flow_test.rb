@@ -75,6 +75,12 @@ class SwimlanesFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "gets swimlane header" do
+    swimlane = @board.swimlanes.create!(name: "Lane")
+    get header_board_swimlane_path(@board, swimlane)
+    assert_response :success
+  end
+
   test "unauthenticated request redirects to login" do
     sign_out
     post board_swimlanes_path(@board), params: { swimlane: { name: "Lane" } }

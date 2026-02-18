@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   resources :boards do
     resources :swimlanes, only: [:create, :edit, :update, :destroy] do
+      member do
+        get :header
+      end
       resources :cards, only: [:create, :edit, :update, :destroy] do
           collection do
             patch :reorder
