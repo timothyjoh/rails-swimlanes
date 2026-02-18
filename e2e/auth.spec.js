@@ -1,18 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { signUp, uniqueEmail } from './helpers/auth.js';
 
 const password = 'password123';
-
-function uniqueEmail(prefix = 'user') {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2)}@example.com`;
-}
-
-async function signUp(page, email) {
-  await page.goto('/registration/new');
-  await page.fill('[name="user[email_address]"]', email);
-  await page.fill('[name="user[password]"]', password);
-  await page.fill('[name="user[password_confirmation]"]', password);
-  await page.click('[type="submit"]');
-}
 
 test.describe('Authentication', () => {
   test('sign up creates account and shows boards page', async ({ page }) => {
@@ -44,7 +33,8 @@ test.describe('Authentication', () => {
     await page.click('[type="submit"]');
     // Session controller redirects to root_path which is boards#index at /
     await expect(page.locator('h1')).toContainText('My Boards');
-    await expect(page).toHaveURL('/boards');
+    // root_path is '/' which maps to boards#index — both URLs are valid
+    await expect(page).toHaveURL(/\/(boards)?$/);
   });
 
   test('log out redirects to login', async ({ page }) => {

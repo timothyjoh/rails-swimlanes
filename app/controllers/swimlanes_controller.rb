@@ -1,4 +1,5 @@
 class SwimlanesController < ApplicationController
+  include ActionView::RecordIdentifier
   before_action :set_board
   before_action :set_swimlane, only: [:edit, :update, :destroy]
 

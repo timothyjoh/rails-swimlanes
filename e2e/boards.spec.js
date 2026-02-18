@@ -1,19 +1,5 @@
 import { test, expect } from '@playwright/test';
-
-const password = 'password123';
-
-function uniqueEmail(prefix = 'boards') {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2)}@example.com`;
-}
-
-async function signUp(page, email) {
-  await page.goto('/registration/new');
-  await page.fill('[name="user[email_address]"]', email);
-  await page.fill('[name="user[password]"]', password);
-  await page.fill('[name="user[password_confirmation]"]', password);
-  await page.click('[type="submit"]');
-  await expect(page).toHaveURL('/boards');
-}
+import { signUp, uniqueEmail } from './helpers/auth.js';
 
 test.describe('Board Management', () => {
   test('create a board', async ({ page }) => {

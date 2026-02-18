@@ -10,7 +10,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <% @boards.each do |board| %>
         <div class="bg-white border rounded-lg p-4 shadow-sm">
-          <h2 class="text-lg font-semibold mb-2"><%= board.name %></h2>
+          <%= link_to board.name, board_path(board), class: "text-lg font-semibold mb-2 hover:text-blue-600 block" %>
           <div class="flex gap-2 mt-3">
             <%= link_to "Edit", edit_board_path(board), class: "text-sm text-blue-600 hover:underline" %>
             <%= button_to "Delete", board_path(board), method: :delete,
