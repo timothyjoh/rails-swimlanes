@@ -76,3 +76,5 @@
 {"event":"step_done","phase":3,"step":"commit","agent":"bash","status":"error","exitCode":128,"ts":"2026-02-18T20:43:36.947Z"}
 {"event":"step_retry","phase":3,"step":"commit","attempt":2,"ts":"2026-02-18T20:43:36.947Z"}
 {"event":"step_start","phase":3,"step":"commit","agent":"bash","model":"default","ts":"2026-02-18T20:44:36.947Z"}
+{"event":"step_done","phase":3,"step":"commit","agent":"bash","status":"error","exitCode":128,"ts":"2026-02-18T20:44:37.045Z"}
+{"event":"pipeline_stopped","phase":3,"step":"commit","reason":"max_retries_exceeded","ts":"2026-02-18T20:44:37.045Z"}
