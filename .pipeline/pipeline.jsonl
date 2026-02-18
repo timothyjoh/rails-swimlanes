@@ -70,3 +70,6 @@
 {"event":"step_start","phase":3,"step":"status","agent":"claude-piped","model":"default","ts":"2026-02-18T20:41:21.842Z"}
 {"event":"step_done","phase":3,"step":"status","agent":"claude-piped","status":"ok","exitCode":0,"ts":"2026-02-18T20:43:06.673Z"}
 {"event":"step_start","phase":3,"step":"commit","agent":"bash","model":"default","ts":"2026-02-18T20:43:06.674Z"}
+{"event":"step_done","phase":3,"step":"commit","agent":"bash","status":"error","exitCode":128,"ts":"2026-02-18T20:43:06.844Z"}
+{"event":"step_retry","phase":3,"step":"commit","attempt":1,"ts":"2026-02-18T20:43:06.844Z"}
+{"event":"step_start","phase":3,"step":"commit","agent":"bash","model":"default","ts":"2026-02-18T20:43:36.845Z"}
