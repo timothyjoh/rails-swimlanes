@@ -1,0 +1,77 @@
+class CardsController < ApplicationController
+  include ActionView::RecordIdentifier
+  before_action :set_board
+  before_action :set_swimlane
+  before_action :set_card, only: [:edit, :update, :destroy]
+
+  def create
+    @card = @swimlane.cards.build(card_params)
+    if @card.save
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @board }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            dom_id(@swimlane, :new_card_form),
+            partial: "cards/new_form",
+            locals: { board: @board, swimlane: @swimlane, card: @card }
+          ), status: :unprocessable_entity
+        end
+        format.html { redirect_to @board, alert: @card.errors.full_messages.to_sentence, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit
+    render partial: "cards/edit_form", locals: { board: @board, swimlane: @swimlane, card: @card }
+  end
+
+  def update
+    if @card.update(card_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @board }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            dom_id(@card, :name),
+            partial: "cards/edit_form",
+            locals: { board: @board, swimlane: @swimlane, card: @card }
+          ), status: :unprocessable_entity
+        end
+        format.html { redirect_to @board }
+      end
+    end
+  end
+
+  def destroy
+    @card.destroy
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@card)) }
+      format.html { redirect_to @board }
+    end
+  end
+
+  private
+
+  def set_board
+    @board = Current.user.boards.find(params[:board_id])
+  end
+
+  def set_swimlane
+    @swimlane = @board.swimlanes.find(params[:swimlane_id])
+  end
+
+  def set_card
+    @card = @swimlane.cards.find(params[:id])
+  end
+
+  def card_params
+    params.require(:card).permit(:name)
+  end
+end

@@ -1,0 +1,11 @@
+<%= turbo_frame_tag dom_id(card, :name) do %>
+  <%= form_with url: board_swimlane_card_path(board, swimlane, card), model: card, method: :patch do |f| %>
+    <% if card.errors.any? %>
+      <p class="text-red-500 text-xs mb-1"><%= card.errors.full_messages.to_sentence %></p>
+    <% end %>
+    <div class="flex gap-1">
+      <%= f.text_field :name, class: "flex-1 text-xs border rounded px-2 py-1" %>
+      <%= f.submit "Save", class: "text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer" %>
+    </div>
+  <% end %>
+<% end %>

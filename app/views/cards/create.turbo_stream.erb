@@ -1,0 +1,2 @@
+<%= turbo_stream.append dom_id(@swimlane, :cards), partial: "cards/card", locals: { card: @card, board: @board, swimlane: @swimlane } %>
+<%= turbo_stream.replace dom_id(@swimlane, :new_card_form), partial: "cards/new_form", locals: { board: @board, swimlane: @swimlane, card: Card.new } %>
