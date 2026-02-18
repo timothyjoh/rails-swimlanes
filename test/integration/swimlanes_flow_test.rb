@@ -50,6 +50,31 @@ class SwimlanesFlowTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "cannot update swimlane on another user's board" do
+    other_user = User.create!(email_address: "other2@test.com", password: "pass1234", password_confirmation: "pass1234")
+    other_board = other_user.boards.create!(name: "Other")
+    other_swimlane = other_board.swimlanes.create!(name: "Their Lane")
+    patch board_swimlane_path(other_board, other_swimlane), params: { swimlane: { name: "Hijacked" } }
+    assert_response :not_found
+  end
+
+  test "cannot destroy swimlane on another user's board" do
+    other_user = User.create!(email_address: "other3@test.com", password: "pass1234", password_confirmation: "pass1234")
+    other_board = other_user.boards.create!(name: "Other")
+    other_swimlane = other_board.swimlanes.create!(name: "Their Lane")
+    delete board_swimlane_path(other_board, other_swimlane)
+    assert_response :not_found
+  end
+
+  test "creates a swimlane via turbo stream" do
+    assert_difference "Swimlane.count" do
+      post board_swimlanes_path(@board),
+           params: { swimlane: { name: "To Do" } },
+           headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    end
+    assert_response :success
+  end
+
   test "unauthenticated request redirects to login" do
     sign_out
     post board_swimlanes_path(@board), params: { swimlane: { name: "Lane" } }
