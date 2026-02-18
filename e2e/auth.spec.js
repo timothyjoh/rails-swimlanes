@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { signUp, uniqueEmail } from './helpers/auth.js';
-
-const password = 'password123';
+import { signUp, uniqueEmail, PASSWORD } from './helpers/auth.js';
 
 test.describe('Authentication', () => {
   test('sign up creates account and shows boards page', async ({ page }) => {
@@ -29,7 +27,7 @@ test.describe('Authentication', () => {
     await expect(page).toHaveURL(/session\/new/);
     // Now log back in
     await page.fill('[name="email_address"]', email);
-    await page.fill('[name="password"]', password);
+    await page.fill('[name="password"]', PASSWORD);
     await page.click('[type="submit"]');
     // Session controller redirects to root_path which is boards#index at /
     await expect(page.locator('h1')).toContainText('My Boards');

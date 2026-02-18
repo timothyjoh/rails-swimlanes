@@ -1,4 +1,4 @@
-const PASSWORD = 'password123';
+export const PASSWORD = 'password123';
 
 export function uniqueEmail(prefix = 'test') {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2)}@example.com`;
