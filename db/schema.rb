@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_170541) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_173929) do
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_boards_on_user_id"
+  end
+
+  create_table "cards", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.integer "swimlane_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["swimlane_id"], name: "index_cards_on_swimlane_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -28,6 +37,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_170541) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "swimlanes", force: :cascade do |t|
+    t.integer "board_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["board_id"], name: "index_swimlanes_on_board_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -37,5 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_170541) do
   end
 
   add_foreign_key "boards", "users"
+  add_foreign_key "cards", "swimlanes"
   add_foreign_key "sessions", "users"
+  add_foreign_key "swimlanes", "boards"
 end
