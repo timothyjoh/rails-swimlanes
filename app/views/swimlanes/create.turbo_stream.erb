@@ -1,0 +1,2 @@
+<%= turbo_stream.append "swimlanes", partial: "swimlanes/swimlane", locals: { swimlane: @swimlane } %>
+<%= turbo_stream.replace "new_swimlane_form", partial: "swimlanes/new_form", locals: { board: @board, swimlane: Swimlane.new } %>

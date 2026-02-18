@@ -1,0 +1,27 @@
+<div id="<%= dom_id(swimlane) %>" class="flex-shrink-0 w-64 bg-gray-100 rounded-lg p-3 flex flex-col gap-2">
+  <%= turbo_frame_tag dom_id(swimlane, :header) do %>
+    <div class="flex justify-between items-center">
+      <span class="font-semibold text-sm"><%= swimlane.name %></span>
+      <div class="flex gap-1">
+        <%= link_to "Rename", edit_board_swimlane_path(swimlane.board, swimlane),
+            class: "text-xs text-blue-500 hover:underline",
+            data: { turbo_frame: dom_id(swimlane, :header) } %>
+        <%= button_to "Delete", board_swimlane_path(swimlane.board, swimlane), method: :delete,
+            data: { turbo_confirm: "Delete \"#{swimlane.name}\" and all its cards?" },
+            class: "text-xs text-red-500 hover:underline bg-transparent border-0 cursor-pointer p-0" %>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="<%= dom_id(swimlane, :cards) %>"
+       class="flex flex-col gap-2 min-h-4"
+       data-controller="sortable"
+       data-sortable-url-value="<%= board_swimlane_cards_path(swimlane.board, swimlane) %>"
+       data-sortable-swimlane-id-value="<%= swimlane.id %>">
+    <%= render swimlane.cards.order(:position) %>
+  </div>
+
+  <%= turbo_frame_tag dom_id(swimlane, :new_card_form) do %>
+    <%= render "cards/new_form", board: swimlane.board, swimlane: swimlane, card: Card.new %>
+  <% end %>
+</div>

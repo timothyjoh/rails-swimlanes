@@ -1,0 +1,11 @@
+<div class="mt-2">
+  <%= form_with url: board_swimlane_cards_path(board, swimlane), model: card do |f| %>
+    <% if card.errors.any? %>
+      <p class="text-red-500 text-xs mb-1"><%= card.errors.full_messages.to_sentence %></p>
+    <% end %>
+    <div class="flex gap-1">
+      <%= f.text_field :name, placeholder: "Add a card...", class: "flex-1 text-xs border rounded px-2 py-1" %>
+      <%= f.submit "Add", class: "text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>
