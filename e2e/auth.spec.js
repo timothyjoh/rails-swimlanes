@@ -44,6 +44,7 @@ test.describe('Authentication', () => {
     await page.click('[type="submit"]');
     // Session controller redirects to root_path which is boards#index at /
     await expect(page.locator('h1')).toContainText('My Boards');
+    await expect(page).toHaveURL('/boards');
   });
 
   test('log out redirects to login', async ({ page }) => {

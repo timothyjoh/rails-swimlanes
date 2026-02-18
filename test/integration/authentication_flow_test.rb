@@ -37,5 +37,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
       user: { email_address: "bad@example.com", password: "password123", password_confirmation: "different" }
     }
     assert_response :unprocessable_entity
+    assert_not User.exists?(email_address: "bad@example.com")
   end
 end

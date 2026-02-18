@@ -1,29 +1,10 @@
-Both review documents are written. Here's a summary of what the review found:
+`STATUS.md` has been written to the project root. Here's a summary of what's in it:
 
----
+**Phase 1 status at a glance:**
+- **Tests**: 30 runs, 71 assertions, **0 failures** — all passing
+- **Coverage**: **82.31%** (107/130 lines) — above the 80% floor
+- **All MUST-FIX items resolved**: SimpleCov parallelization fixed, DB `null: false` constraint added
+- **5 minor fixes addressed** from the review (fixture ordering, negative assertions, E2E URL assertion)
+- **3 items deferred to Phase 2**: implicit `require_authentication`, untested `show` action, whitespace name validation
 
-## Review Complete
-
-**Verdict: NEEDS-FIX**
-
-### Code Quality — Key Findings
-
-| Severity | Issue |
-|----------|-------|
-| Critical | `boards.name` column has no `null: false` DB constraint — model validation can be bypassed |
-| Critical | `parallelize(workers: :number_of_processors)` + SimpleCov are incompatible — coverage reporting is unreliable |
-| Minor | `ApplicationController` missing explicit `before_action :require_authentication` (works implicitly via concern, but fragile) |
-| Minor | `SessionsController` test uses `User.take` — non-deterministic fixture selection |
-| Minor | `show` action/view added outside plan scope and untested |
-
-### Test Quality — Key Findings
-
-| Severity | Issue |
-|----------|-------|
-| Critical | SimpleCov parallelization issue means `minimum_coverage 80` is not reliably enforced |
-| Minor | Sign-up failure test missing `assert_not User.exists?` negative assertion |
-| Minor | Boards index test doesn't assert other users' boards are absent |
-| Minor | E2E login test asserts heading text only, not URL |
-| Minor | E2E delete dialog handler registered after visibility check (ordering risk in slow CI) |
-
-**What's genuinely good:** No mock abuse anywhere, real ActiveRecord objects throughout, cross-user authorization tested for edit/update/delete (went beyond the plan), `uniqueEmail` helper in E2E avoids collision races, and the `SessionTestHelper` is a clean abstraction for test sign-in.
+The "Current state" in the Overview section accurately reflects what a user can do right now — sign up, manage their own boards, and log out.

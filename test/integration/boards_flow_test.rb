@@ -8,9 +8,12 @@ class BoardsFlowTest < ActionDispatch::IntegrationTest
 
   test "boards index lists user boards" do
     Board.create!(name: "Sprint 1", user: @user)
+    other_user = User.create!(email_address: "other@example.com", password: "password123")
+    Board.create!(name: "Other User Board", user: other_user)
     get boards_path
     assert_response :success
     assert_match "Sprint 1", response.body
+    assert_no_match "Other User Board", response.body
   end
 
   test "create a board" do
