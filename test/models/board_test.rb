@@ -25,4 +25,10 @@ class BoardTest < ActiveSupport::TestCase
     board = Board.create!(name: "Sprint 1", user: @user)
     assert_equal @user, board.user
   end
+
+  test "is invalid with whitespace-only name" do
+    board = Board.new(name: "   ", user: users(:one))
+    assert_not board.valid?
+    assert_includes board.errors[:name], "can't be blank"
+  end
 end
