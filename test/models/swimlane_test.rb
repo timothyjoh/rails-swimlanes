@@ -40,6 +40,13 @@ class SwimlaneTest < ActiveSupport::TestCase
     assert_equal @board, swimlane.board
   end
 
+  test "position sequence is scoped per board" do
+    other_board = @user.boards.create!(name: "Other Board")
+    other_board.swimlanes.create!(name: "Other First")
+    lane = @board.swimlanes.create!(name: "First on this board")
+    assert_equal 0, lane.position
+  end
+
   test "destroying swimlane destroys its cards" do
     swimlane = @board.swimlanes.create!(name: "Lane")
     swimlane.cards.create!(name: "Card 1")

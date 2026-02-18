@@ -36,6 +36,13 @@ class CardTest < ActiveSupport::TestCase
     assert_equal 1, second.position
   end
 
+  test "position sequence is scoped per swimlane" do
+    other_lane = @board.swimlanes.create!(name: "Other Lane")
+    other_lane.cards.create!(name: "Other First")
+    card = @swimlane.cards.create!(name: "First on this lane")
+    assert_equal 0, card.position
+  end
+
   test "belongs to swimlane" do
     card = @swimlane.cards.create!(name: "Task")
     assert_equal @swimlane, card.swimlane
