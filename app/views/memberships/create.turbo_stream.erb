@@ -1,0 +1,2 @@
+<%= turbo_stream.append "memberships", partial: "memberships/membership", locals: { membership: @membership, board: @board } %>
+<%= turbo_stream.replace "membership_form", partial: "memberships/form", locals: { board: @board } %>

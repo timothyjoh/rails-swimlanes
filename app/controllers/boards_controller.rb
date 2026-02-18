@@ -1,8 +1,10 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: [:show, :edit, :update, :destroy]
+  before_action :require_owner!, only: [:edit, :update, :destroy]
 
   def index
-    @boards = Current.user.boards.order(created_at: :desc)
+    @boards = Board.accessible_by(Current.user).order(created_at: :desc)
+    @owned_board_ids = BoardMembership.where(user: Current.user, role: :owner).pluck(:board_id).to_set
   end
 
   def show
@@ -15,11 +17,13 @@ class BoardsController < ApplicationController
 
   def create
     @board = Current.user.boards.new(board_params)
-    if @board.save
-      redirect_to boards_path, notice: "Board created."
-    else
-      render :new, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      @board.save!
+      @board.board_memberships.create!(user: Current.user, role: :owner)
     end
+    redirect_to boards_path, notice: "Board created."
+  rescue ActiveRecord::RecordInvalid
+    render :new, status: :unprocessable_entity
   end
 
   def edit; end
@@ -40,7 +44,11 @@ class BoardsController < ApplicationController
   private
 
   def set_board
-    @board = Current.user.boards.find(params[:id])
+    @board = Board.accessible_by(Current.user).find(params[:id])
+  end
+
+  def require_owner!
+    raise ActiveRecord::RecordNotFound unless BoardMembership.exists?(board: @board, user: Current.user, role: :owner)
   end
 
   def board_params

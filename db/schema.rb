@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_200003) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_220550) do
+  create_table "board_memberships", force: :cascade do |t|
+    t.integer "board_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["board_id", "user_id"], name: "index_board_memberships_on_board_id_and_user_id", unique: true
+    t.index ["board_id"], name: "index_board_memberships_on_board_id"
+    t.index ["user_id"], name: "index_board_memberships_on_user_id"
+  end
+
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -73,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_200003) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "board_memberships", "boards"
+  add_foreign_key "board_memberships", "users"
   add_foreign_key "boards", "users"
   add_foreign_key "card_labels", "cards"
   add_foreign_key "card_labels", "labels"

@@ -13,6 +13,14 @@ export async function signUp(page, email) {
   await page.waitForURL('/boards');
 }
 
+export async function signIn(page, email, password = PASSWORD) {
+  await page.goto('/session/new');
+  await page.fill('[name="email_address"]', email);
+  await page.fill('[name="password"]', password);
+  await page.click('[type="submit"]');
+  await page.waitForURL(/\/(boards)?$/);
+}
+
 export async function createBoard(page, name) {
   await page.click('text=New Board');
   await page.fill('[name="board[name]"]', name);

@@ -1,0 +1,13 @@
+<div id="membership_form">
+  <%= form_with url: board_memberships_path(board), method: :post, class: "flex gap-2 items-start" do |f| %>
+    <div class="flex-1">
+      <%= f.email_field :email_address, placeholder: "user@example.com",
+          class: "w-full border rounded px-3 py-2 text-sm",
+          required: true %>
+      <% if local_assigns[:error] %>
+        <p class="text-red-600 text-xs mt-1"><%= error %></p>
+      <% end %>
+    </div>
+    <%= f.submit "Add", class: "bg-blue-600 text-white px-3 py-2 rounded text-sm hover:bg-blue-700 cursor-pointer" %>
+  <% end %>
+</div>

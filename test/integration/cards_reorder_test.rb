@@ -3,7 +3,7 @@ require "test_helper"
 class CardsReorderTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email_address: "reorder@test.com", password: "password123", password_confirmation: "password123")
-    @board = @user.boards.create!(name: "Board")
+    @board = create_owned_board(@user, name: "Board")
     @lane1 = @board.swimlanes.create!(name: "Lane 1")
     @lane2 = @board.swimlanes.create!(name: "Lane 2")
     @card1 = @lane1.cards.create!(name: "First")
@@ -31,7 +31,7 @@ class CardsReorderTest < ActionDispatch::IntegrationTest
 
   test "cannot reorder card from another user's board" do
     other_user = User.create!(email_address: "evil@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Evil")
+    other_board = create_owned_board(other_user, name: "Evil")
     other_lane = other_board.swimlanes.create!(name: "Lane")
     other_card = other_lane.cards.create!(name: "Card")
     patch reorder_board_swimlane_cards_path(@board, @lane1),

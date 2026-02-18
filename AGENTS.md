@@ -50,8 +50,9 @@ npx playwright test
 ```
 app/
   controllers/     # ApplicationController, BoardsController, SwimlanesController,
-                   # CardsController, RegistrationsController, SessionsController, PasswordsController
-  models/          # User, Board, Swimlane, Card, Label, CardLabel, Session, Current
+                   # CardsController, MembershipsController, RegistrationsController,
+                   # SessionsController, PasswordsController
+  models/          # User, Board, BoardMembership, Swimlane, Card, Label, CardLabel, Session, Current
   views/           # boards/, swimlanes/, cards/, sessions/, registrations/, passwords/, layouts/
   javascript/
     controllers/   # sortable_controller.js (SortableJS drag-and-drop)
@@ -88,14 +89,16 @@ Swimlane and card routes are nested under boards:
 /boards/:board_id/swimlanes/:swimlane_id/cards/:id/edit → cards#edit
 ```
 
-## Authorization Chain (Phase 2)
+## Authorization Chain (Phase 4 — membership-scoped)
 
-All swimlane/card actions scope through the current user's boards:
+All board/swimlane/card access is scoped via `Board.accessible_by(Current.user)`, which joins `board_memberships`. Edit and delete board are owner-only (checked via `BoardMembership` role=owner). Members can create/edit/delete swimlanes and cards.
 
 ```ruby
-@board = Current.user.boards.find(params[:board_id])      # raises 404 for wrong user
-@swimlane = @board.swimlanes.find(params[:swimlane_id])   # raises 404 if not under board
-@card = @swimlane.cards.find(params[:id])                 # raises 404 if not under swimlane
+@board = Board.accessible_by(Current.user).find(params[:board_id])   # raises 404 for non-members
+@swimlane = @board.swimlanes.find(params[:swimlane_id])               # raises 404 if not under board
+@card = @swimlane.cards.find(params[:id])                             # raises 404 if not under swimlane
+# Owner-only actions (edit/update/destroy board):
+raise ActiveRecord::RecordNotFound unless BoardMembership.exists?(board: @board, user: Current.user, role: :owner)
 ```
 
 ## Data Models (Phase 3 additions)
@@ -103,6 +106,16 @@ All swimlane/card actions scope through the current user's boards:
 - **Card** (updated): added `description` (text, nullable), `due_date` (date, nullable), `overdue?` method, `overdue` and `upcoming` scopes
 - **Label**: `color` (string, one of: red/yellow/green/blue/purple), unique index on color. Seeded via `db/seeds.rb` — run `bin/rails db:seed` to create the 5 predefined labels
 - **CardLabel**: join model between Card and Label (`card_id` FK, `label_id` FK, unique composite index)
+
+## Data Models (Phase 4 additions)
+
+- **BoardMembership**: join table connecting boards to users with a `role` enum
+  - `board_id` (FK → boards), `user_id` (FK → users)
+  - `role`: integer enum — `0=owner`, `1=member`
+  - Unique index on `[board_id, user_id]` prevents duplicate memberships
+  - When a board is created, an owner membership row is automatically created for the creating user
+- **Board** (updated): `Board.accessible_by(user)` scope — returns boards where user has any membership
+- **MembershipsController**: `POST /boards/:board_id/memberships` (add member by email, owner only), `DELETE /boards/:board_id/memberships/:id` (remove member, owner only)
 
 ### Card Detail Route
 
@@ -134,8 +147,8 @@ The `reorder` action moves the card to the destination swimlane and rebuilds all
 ## Phase Roadmap
 - Phase 1 ✓ — Setup, auth, board CRUD
 - Phase 2 ✓ — Swimlanes (columns) and cards
-- Phase 3: Card details (descriptions, due dates, labels, checklists)
-- Phase 4: Board sharing between users
+- Phase 3 ✓ — Card details (descriptions, due dates, labels, checklists)
+- Phase 4 ✓ — Board sharing between users (BoardMembership, membership-scoped auth, sharing UI)
 - Phase 5: Real-time updates (ActionCable)
 - Phase 6: Board background customization
 

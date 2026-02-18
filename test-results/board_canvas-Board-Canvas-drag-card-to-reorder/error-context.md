@@ -1,0 +1,48 @@
+# Page snapshot
+
+```yaml
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "My Canvas Board" [level=1] [ref=e5]
+      - generic [ref=e6]:
+        - link "Edit Board" [ref=e7] [cursor=pointer]:
+          - /url: /boards/980190968/edit
+        - link "Back to Boards" [ref=e8] [cursor=pointer]:
+          - /url: /boards
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Todo
+          - generic [ref=e15]:
+            - link "Rename" [ref=e16] [cursor=pointer]:
+              - /url: /boards/980190968/swimlanes/980190966/edit
+            - button "Delete" [ref=e18] [cursor=pointer]
+        - generic [ref=e19]:
+          - generic [ref=e23]:
+            - link "First Card" [ref=e24] [cursor=pointer]:
+              - /url: /boards/980190968/swimlanes/980190966/cards/980190965
+            - generic [ref=e25]:
+              - link "✎" [ref=e26] [cursor=pointer]:
+                - /url: /boards/980190968/swimlanes/980190966/cards/980190965/edit
+              - button "✕" [ref=e28] [cursor=pointer]
+          - generic [ref=e32]:
+            - link "Second Card" [ref=e33] [cursor=pointer]:
+              - /url: /boards/980190968/swimlanes/980190966/cards/980190966
+            - generic [ref=e34]:
+              - link "✎" [ref=e35] [cursor=pointer]:
+                - /url: /boards/980190968/swimlanes/980190966/cards/980190966/edit
+              - button "✕" [ref=e37] [cursor=pointer]
+        - generic [ref=e40]:
+          - textbox "Add a card..." [ref=e41]
+          - button "Add" [ref=e42] [cursor=pointer]
+      - generic [ref=e45]:
+        - textbox "Lane name..." [ref=e46]
+        - button "Add Lane" [ref=e47] [cursor=pointer]
+    - generic [ref=e49]:
+      - heading "Members" [level=2] [ref=e50]
+      - generic [ref=e53]: canvas_1771452974054_o7300yrfqvp@example.com owner
+      - generic [ref=e55]:
+        - textbox "user@example.com" [ref=e57]
+        - button "Add" [ref=e58] [cursor=pointer]
+```

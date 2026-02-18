@@ -3,7 +3,7 @@ require "test_helper"
 class SwimlanesFlowTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email_address: "swim@test.com", password: "password123", password_confirmation: "password123")
-    @board = @user.boards.create!(name: "My Board")
+    @board = create_owned_board(@user, name: "My Board")
     sign_in_as @user
   end
 
@@ -45,14 +45,15 @@ class SwimlanesFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "cannot create swimlane on another user's board" do
-    other_board = User.create!(email_address: "other@test.com", password: "pass1234", password_confirmation: "pass1234").boards.create!(name: "Other")
+    other_user = User.create!(email_address: "other@test.com", password: "pass1234", password_confirmation: "pass1234")
+    other_board = create_owned_board(other_user, name: "Other")
     post board_swimlanes_path(other_board), params: { swimlane: { name: "Lane" } }
     assert_response :not_found
   end
 
   test "cannot update swimlane on another user's board" do
     other_user = User.create!(email_address: "other2@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Other")
+    other_board = create_owned_board(other_user, name: "Other")
     other_swimlane = other_board.swimlanes.create!(name: "Their Lane")
     patch board_swimlane_path(other_board, other_swimlane), params: { swimlane: { name: "Hijacked" } }
     assert_response :not_found
@@ -60,7 +61,7 @@ class SwimlanesFlowTest < ActionDispatch::IntegrationTest
 
   test "cannot destroy swimlane on another user's board" do
     other_user = User.create!(email_address: "other3@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Other")
+    other_board = create_owned_board(other_user, name: "Other")
     other_swimlane = other_board.swimlanes.create!(name: "Their Lane")
     delete board_swimlane_path(other_board, other_swimlane)
     assert_response :not_found

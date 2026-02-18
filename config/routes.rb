@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resource :registration, only: [:new, :create]
 
   resources :boards do
+    resources :memberships, only: [:create, :destroy]
     resources :swimlanes, only: [:create, :edit, :update, :destroy] do
       member do
         get :header

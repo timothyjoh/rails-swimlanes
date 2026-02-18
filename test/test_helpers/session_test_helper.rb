@@ -12,6 +12,12 @@ module SessionTestHelper
     Current.session&.destroy!
     cookies.delete("session_id")
   end
+
+  def create_owned_board(user, name:)
+    board = Board.create!(name: name, user: user)
+    board.board_memberships.create!(user: user, role: :owner)
+    board
+  end
 end
 
 ActiveSupport.on_load(:action_dispatch_integration_test) do

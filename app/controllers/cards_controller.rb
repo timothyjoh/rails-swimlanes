@@ -64,7 +64,7 @@ class CardsController < ApplicationController
   def reorder
     card = Card.find(params[:card_id])
     # Verify card belongs to current user's board chain
-    unless Current.user.boards.joins(swimlanes: :cards).where(cards: { id: card.id }).exists?
+    unless Board.accessible_by(Current.user).joins(swimlanes: :cards).where(cards: { id: card.id }).exists?
       raise ActiveRecord::RecordNotFound
     end
 
@@ -85,7 +85,7 @@ class CardsController < ApplicationController
   private
 
   def set_board
-    @board = Current.user.boards.find(params[:board_id])
+    @board = Board.accessible_by(Current.user).find(params[:board_id])
   end
 
   def set_swimlane

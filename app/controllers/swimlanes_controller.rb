@@ -51,7 +51,7 @@ class SwimlanesController < ApplicationController
   private
 
   def set_board
-    @board = Current.user.boards.find(params[:board_id])
+    @board = Board.accessible_by(Current.user).find(params[:board_id])
   end
 
   def set_swimlane

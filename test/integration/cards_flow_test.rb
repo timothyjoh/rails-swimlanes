@@ -3,7 +3,7 @@ require "test_helper"
 class CardsFlowTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email_address: "cards@test.com", password: "password123", password_confirmation: "password123")
-    @board = @user.boards.create!(name: "Board")
+    @board = create_owned_board(@user, name: "Board")
     @swimlane = @board.swimlanes.create!(name: "Lane")
     sign_in_as @user
   end
@@ -56,7 +56,7 @@ class CardsFlowTest < ActionDispatch::IntegrationTest
 
   test "cannot create card on another user's board" do
     other_user = User.create!(email_address: "z@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Other")
+    other_board = create_owned_board(other_user, name: "Other")
     other_lane = other_board.swimlanes.create!(name: "Lane")
     post board_swimlane_cards_path(other_board, other_lane), params: { card: { name: "Hack" } }
     assert_response :not_found
@@ -64,7 +64,7 @@ class CardsFlowTest < ActionDispatch::IntegrationTest
 
   test "cannot update card on another user's board" do
     other_user = User.create!(email_address: "evil@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Evil")
+    other_board = create_owned_board(other_user, name: "Evil")
     other_lane = other_board.swimlanes.create!(name: "Lane")
     other_card = other_lane.cards.create!(name: "Card")
     patch board_swimlane_card_path(other_board, other_lane, other_card), params: { card: { name: "Hijacked" } }
@@ -73,7 +73,7 @@ class CardsFlowTest < ActionDispatch::IntegrationTest
 
   test "cannot destroy card on another user's board" do
     other_user = User.create!(email_address: "evil2@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Evil")
+    other_board = create_owned_board(other_user, name: "Evil")
     other_lane = other_board.swimlanes.create!(name: "Lane")
     other_card = other_lane.cards.create!(name: "Card")
     delete board_swimlane_card_path(other_board, other_lane, other_card)
@@ -90,7 +90,7 @@ class CardsFlowTest < ActionDispatch::IntegrationTest
 
   test "show card detail — wrong user gets 404" do
     other_user = User.create!(email_address: "other_show@test.com", password: "pass1234", password_confirmation: "pass1234")
-    other_board = other_user.boards.create!(name: "Other Board")
+    other_board = create_owned_board(other_user, name: "Other Board")
     other_lane = other_board.swimlanes.create!(name: "Lane")
     other_card = other_lane.cards.create!(name: "Secret")
     get board_swimlane_card_path(other_board, other_lane, other_card)

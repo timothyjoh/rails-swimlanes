@@ -23,6 +23,14 @@ A Trello-like board management application built with Rails 8, Hotwire (Turbo + 
 - Color-coded labels (red, yellow, green, blue, purple) toggled from the card detail view
 - Card detail modal: click a card title to open an expanded view with description, due date, and labels
 
+**Phase 4 — Board Sharing**
+- Board owners can share boards with other registered users by email address
+- Collaborators (members) can create, edit, and delete swimlanes and cards
+- Owner-only controls (rename board, delete board) are hidden from collaborators
+- Members panel on the board page shows current members; add/remove updates live via Turbo Streams
+- Shared boards appear on the collaborator's boards index page
+- Non-members receive 404 when accessing a board URL directly
+
 ## Getting Started
 
 ### Prerequisites
@@ -73,7 +81,7 @@ Coverage report generated to `coverage/index.html` after running `bin/rails test
 ## Project Roadmap
 - Phase 1 ✓ — Setup, authentication, board CRUD
 - Phase 2 ✓ — Swimlanes (columns) and cards
-- Phase 3 — Card details (descriptions, due dates, labels, checklists)
-- Phase 4 — Board sharing between users
+- Phase 3 ✓ — Card details (descriptions, due dates, labels, checklists)
+- Phase 4 ✓ — Board sharing between users
 - Phase 5 — Real-time updates (ActionCable)
 - Phase 6 — Board background customization

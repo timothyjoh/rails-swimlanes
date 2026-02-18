@@ -1,13 +1,11 @@
-STATUS.md is updated. Here's a summary of what was written:
+STATUS.md updated. Here's a summary of what was written:
 
-**Phase 3 section covers:**
+**Phase 4: Board Sharing** section added, covering:
 
-- **What was built**: Card detail modal via Turbo Frame, description + due date + label fields, `Label`/`CardLabel` models, DB-level card ordering fix, N+1 eager-loading fix, real Playwright drag test replacing the fetch stub
+- **What was built**: `BoardMembership` model with role enum, `Board.accessible_by` scope, authorization sweep across all 5 controller sites, `MembershipsController` with Turbo Stream add/remove, owner-only Members panel, view gates hiding Edit/Delete from collaborators, and non-member 404 on all board URLs.
 
-- **How to run it**: Includes `bin/rails db:seed` as a new step needed for the 5 predefined labels
+- **Review findings**: 4 must-fixes resolved (transaction gap in board creation, memory-loading N+1 in membership check, missing collaborator PATCH/DELETE tests, non-deterministic membership ordering). Three open items deferred (double-query on owner actions, DB call in views, unused E2E import).
 
-- **Review findings**: All 3 MUST-FIX items are marked resolved (description/due-date Turbo Stream fix, drag assertion fix, overdue HTML assertion fix); 4 open deferred items noted honestly
+- **Test results (actual)**: **118 runs, 275 assertions, 0 failures, 0 errors, 0 skips** — **89.18% coverage** (272/305 lines).
 
-- **Test results**: 89 runs, 212 assertions, 0 failures, 0 errors — **87.06%** line coverage (actual numbers from running the suite)
-
-- **Known gaps**: Upcoming scope boundary, N+1 regression guard, invalid label IDs, Turbo Stream label chip HTML assertion
+- **What's next**: Phase 5 (ActionCable real-time updates), with a recommendation to research channel authentication before building any UI.

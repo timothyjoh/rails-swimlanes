@@ -1,8 +1,12 @@
+<% is_owner = @board.board_memberships.exists?(user: Current.user, role: :owner) %>
+
 <div class="flex flex-col h-full">
   <div class="flex justify-between items-center mb-4 px-4 pt-4">
     <h1 class="text-2xl font-bold"><%= @board.name %></h1>
     <div class="flex gap-2">
-      <%= link_to "Edit Board", edit_board_path(@board), class: "text-sm text-blue-600 hover:underline" %>
+      <% if is_owner %>
+        <%= link_to "Edit Board", edit_board_path(@board), class: "text-sm text-blue-600 hover:underline" %>
+      <% end %>
       <%= link_to "Back to Boards", boards_path, class: "text-sm text-gray-600 hover:underline" %>
     </div>
   </div>
@@ -18,4 +22,16 @@
       <% end %>
     </div>
   </div>
+
+  <% if is_owner %>
+    <div class="px-4 pb-4 mt-4">
+      <div class="bg-white border rounded-lg p-4 shadow-sm max-w-md">
+        <h2 class="text-lg font-semibold mb-3">Members</h2>
+        <div id="memberships" class="space-y-2 mb-3">
+          <%= render partial: "memberships/membership", collection: @board.board_memberships.includes(:user), as: :membership, locals: { board: @board } %>
+        </div>
+        <%= render "memberships/form", board: @board %>
+      </div>
+    </div>
+  <% end %>
 </div>
