@@ -12,70 +12,70 @@
 #   Claude: opus, sonnet, haiku
 #   Codex:  o3, o4-mini, etc.
 
-name: "Default Pipeline"
+name: 'Default Pipeline'
 version: 1
 
-phases_dir: "docs/phases"
+phases_dir: 'docs/phases'
 
 steps:
   - name: spec
-    description: "Break project vision into phase spec"
+    description: 'Break project vision into phase spec'
     agent: claude-piped
     # model: sonnet
     prompt: prompts/spec.md
-    output: "SPEC.md"
+    output: 'SPEC.md'
 
   - name: research
-    description: "Analyze current codebase state"
+    description: 'Analyze current codebase state'
     agent: claude-piped
     # model: sonnet
     prompt: prompts/research.md
-    output: "RESEARCH.md"
+    output: 'RESEARCH.md'
 
   - name: plan
-    description: "Create actionable implementation plan"
+    description: 'Create actionable implementation plan'
     agent: claude-piped
     # model: sonnet
     prompt: prompts/plan.md
-    output: "PLAN.md"
+    output: 'PLAN.md'
 
   - name: build
-    description: "Implement the plan with agent teams"
+    description: 'Implement the plan with agent teams'
     agent: claude-interactive
     prompt: prompts/build.md
     test_gate: true
 
   - name: review
-    description: "Staff engineer code + test review"
+    description: 'Staff engineer code + test review'
     agent: claude-piped
     # agent: codex-exec        # Uncomment for second-opinion review
     # model: o3
     prompt: prompts/review.md
-    output: "REVIEW.md"
+    output: 'REVIEW.md'
 
   - name: fix
-    description: "Address review findings"
+    description: 'Address review findings'
     agent: claude-interactive
     prompt: prompts/fix.md
-    skip_unless: "MUST-FIX.md"
+    skip_unless: 'MUST-FIX.md'
     test_gate: true
 
   - name: reflect
-    description: "Look back + look forward for next phase"
+    description: 'Look back + look forward for next phase'
     agent: claude-piped
     prompt: prompts/reflect.md
-    output: "REFLECTIONS.md"
+    output: 'REFLECTIONS.md'
 
   - name: status
-    description: "Update STATUS.md with phase summary"
+    description: 'Update STATUS.md with phase summary'
     agent: claude-piped
     prompt: prompts/status.md
 
   - name: commit
-    description: "Git commit + push"
+    description: 'Git commit + push'
     agent: bash
     command: "git add -A && git commit -m 'Phase {{PHASE}} complete' && git push origin master"
 
 # Usage tracking
 usage_check:
-  when: phase_boundary    # pipeline_start, phase_boundary, every_step
+  when: phase_boundary # pipeline_start, phase_boundary, every_step

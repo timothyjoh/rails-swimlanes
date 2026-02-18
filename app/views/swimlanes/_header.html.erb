@@ -2,10 +2,10 @@
   <div class="flex justify-between items-center">
     <span class="font-semibold text-sm"><%= swimlane.name %></span>
     <div class="flex gap-1">
-      <%= link_to "Rename", edit_board_swimlane_path(swimlane.board, swimlane),
+      <%= link_to "Rename", edit_board_swimlane_path(board, swimlane),
           class: "text-xs text-blue-500 hover:underline",
           data: { turbo_frame: dom_id(swimlane, :header) } %>
-      <%= button_to "Delete", board_swimlane_path(swimlane.board, swimlane), method: :delete,
+      <%= button_to "Delete", board_swimlane_path(board, swimlane), method: :delete,
           data: { turbo_confirm: "Delete \"#{swimlane.name}\" and all its cards?" },
           class: "text-xs text-red-500 hover:underline bg-transparent border-0 cursor-pointer p-0" %>
     </div>

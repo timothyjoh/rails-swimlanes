@@ -1,1 +1,1 @@
-<%= turbo_stream.replace dom_id(@swimlane, :header), partial: "swimlanes/header", locals: { swimlane: @swimlane } %>
+<%= turbo_stream.replace dom_id(@swimlane, :header), partial: "swimlanes/header", locals: { swimlane: @swimlane, board: @board } %>
