@@ -100,3 +100,12 @@
 {"event":"step_start","phase":4,"step":"status","agent":"claude-piped","model":"default","ts":"2026-02-18T22:26:18.536Z"}
 {"event":"step_done","phase":4,"step":"status","agent":"claude-piped","status":"ok","exitCode":0,"ts":"2026-02-18T22:28:08.859Z"}
 {"event":"step_start","phase":4,"step":"commit","agent":"bash","model":"default","ts":"2026-02-18T22:28:08.859Z"}
+{"event":"step_done","phase":4,"step":"commit","agent":"bash","status":"ok","exitCode":0,"ts":"2026-02-18T22:28:09.714Z"}
+{"event":"phase_complete","phase":4,"ts":"2026-02-18T22:28:09.715Z"}
+{"event":"step_start","phase":5,"step":"spec","agent":"claude-piped","model":"default","ts":"2026-02-18T22:28:14.715Z"}
+{"event":"step_done","phase":5,"step":"spec","agent":"claude-piped","status":"ok","exitCode":0,"ts":"2026-02-18T22:29:45.809Z"}
+{"event":"output_verified","phase":5,"step":"spec","file":"SPEC.md","ts":"2026-02-18T22:29:45.809Z"}
+{"event":"step_start","phase":5,"step":"research","agent":"claude-piped","model":"default","ts":"2026-02-18T22:29:45.809Z"}
+{"event":"step_done","phase":5,"step":"research","agent":"claude-piped","status":"ok","exitCode":0,"ts":"2026-02-18T22:32:35.837Z"}
+{"event":"output_verified","phase":5,"step":"research","file":"RESEARCH.md","ts":"2026-02-18T22:32:35.837Z"}
+{"event":"step_start","phase":5,"step":"plan","agent":"claude-piped","model":"default","ts":"2026-02-18T22:32:35.838Z"}
